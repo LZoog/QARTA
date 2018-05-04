@@ -1,5 +1,5 @@
 import Nightmare from 'nightmare'
-const nightmare = Nightmare()
+import { paths, urls } from './config.js'
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -12,10 +12,10 @@ Date.prototype.today = function () {
 }
 
 Date.prototype.timeNow = function () {
-  return ((this.getHours() < 10)?"0":"") + this.getHours() +"-"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"-"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+  return ((this.getHours() < 10)?"0":"") + this.getHours() +"-"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"-"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds()
 }
 
-const start = async () => {
+;(async () => {
   await asyncForEach(paths, async (pathObject) => {
     console.log('in first forEach')
     await asyncForEach(urls, async (urlObject) => {
@@ -29,9 +29,7 @@ const start = async () => {
     // this is where we want to use blink-diff
   })
   console.log('after looping through paths - finished')
-}
-
-start()
+})()
 
 async function screenshot(urlObject, pathObject) {
   const { url, name: urlName } = urlObject
