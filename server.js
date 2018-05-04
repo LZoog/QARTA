@@ -1,7 +1,6 @@
 import Nightmare from 'nightmare'
 const nightmare = Nightmare()
 
-
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
@@ -16,14 +15,12 @@ Date.prototype.timeNow = function () {
   return ((this.getHours() < 10)?"0":"") + this.getHours() +"-"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"-"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
-
-
 const start = async () => {
-  await asyncForEach(paths, async (path) => {
+  await asyncForEach(paths, async (pathObject) => {
     console.log('in first forEach')
-    await asyncForEach(domains, async (domain) => {
+    await asyncForEach(urls, async (urlObject) => {
       try {
-        screenshot(domain, path)
+        await screenshot(urlObject, pathObject)
       } catch(error) {
         console.log('ERRORRRR')
       }
@@ -36,13 +33,19 @@ const start = async () => {
 
 start()
 
-async function screenshot(domain, path) {
+async function screenshot(urlObject, pathObject) {
+  const { url, name: urlName } = urlObject
+  const { path, name: pathName } = pathObject
+
   const nightmare = Nightmare()
-  const pageUrl = `${domain.url}/${path}`
+  const pageUrl = `${url}/${path}`
   const newDate = new Date()
   const timeStamp = `${newDate.today()}@${newDate.timeNow()}`
 
-  const screenshotName = `${domain.nickname}_${path.replace(/\//g, '-')}_${timeStamp}`
+  // const screenshotName = `${domain.nickname}_${path.replace(/\//g, '-')}_${timeStamp}`
+  const screenshotName = `${urlName}_${pathName}_${timeStamp}`
+
+  console.log('pageUrl', pageUrl)
 
   const dimensions = await nightmare.goto(pageUrl).evaluate(() => {
     const html = document.querySelector('html')
