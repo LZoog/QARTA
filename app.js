@@ -1,6 +1,7 @@
 
 import { paths, urls } from './config'
 import { parallelScreenshots } from './server/screenshot'
+import { screenshotDiff } from './server/screenshot-diff'
 import './server/timestamp'
 
 ;(() => {
@@ -11,6 +12,7 @@ import './server/timestamp'
     (async () => {
       const screenshots = await parallelScreenshots(urls, pathObject, timestamp)
 
+      screenshotDiff(screenshots)
       console.log(screenshots)
     })()
   }
