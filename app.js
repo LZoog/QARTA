@@ -4,34 +4,29 @@ import { asyncForEach } from './server/helpers.js'
 import './server/timestamp.js'
 
 
-async function parallel(urlObject1, urlObject2, pathObject, timestamp) {
-  const screenshot1 = screenshot(urlObject1, pathObject, timestamp);
-  const screenshot2 = screenshot(urlObject2, pathObject, timestamp);
+;(() => {
+  const newDate = new Date()
+  const timestamp = newDate.timeStamp(newDate)
+
+  for (const pathObject of paths) {
+    (async () => {
+      const screenshots = await parallelScreenshots(pathObject, timestamp)
+
+      console.log(screenshots)
+    })()
+  }
+})()
+
+async function parallelScreenshots(pathObject, timestamp) {
+  // at present, only two urls are allowed in config
+  const screenshot1 = screenshot(urls[0], pathObject, timestamp);
+  const screenshot2 = screenshot(urls[1], pathObject, timestamp);
 
   return {
     screenshot1: await screenshot1,
     screenshot2: await screenshot2,
   }
 }
-
-async function awaitParallel(urlObject1, urlObject2, pathObject, timestamp) {
-  console.log('in test')
-  const screenshots = await parallel(urlObject1, urlObject2, pathObject, timestamp)
-
-  // blink-diff
-}
-
-;(async () => {
-  const newDate = new Date()
-  const timestamp = newDate.timeStamp(newDate)
-
-  for (let pathObject of paths) {
-
-    // at present, only TWO urls are allowed in config
-    awaitParallel(urls[0], urls[1], pathObject, timestamp)
-    console.log('loopdy loop')
-  }
-})()
 
 async function screenshot(urlObject, pathObject, timestamp) {
   console.log('screenshot fired')
