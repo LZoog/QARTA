@@ -3,10 +3,9 @@ import { paths, urls } from './config'
 import { parallelScreenshots } from './server/screenshot'
 import './server/timestamp'
 
-
 ;(() => {
   const newDate = new Date()
-  const timestamp = newDate.timeStamp(newDate)
+  const timestamp = newDate.timestamp(newDate)
 
   for (const pathObject of paths) {
     (async () => {

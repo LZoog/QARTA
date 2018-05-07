@@ -6,4 +6,4 @@ Date.prototype.timeNow = function () {
   return `${((this.getHours() < 10)?'0':'') + this.getHours()}-${((this.getMinutes() < 10)?'0':'') + this.getMinutes()}-${((this.getSeconds() < 10)?'0':'') + this.getSeconds()}`
 }
 
-Date.prototype.timeStamp = (newDate) => `${newDate.today()}@${newDate.timeNow()}`
+Date.prototype.timestamp = (newDate) => `${newDate.today()}@${newDate.timeNow()}`
