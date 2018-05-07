@@ -1,7 +1,7 @@
 import Nightmare from 'nightmare'
-import { paths, urls } from './config.js'
-import { asyncForEach } from './server/helpers.js'
-import './server/timestamp.js'
+import { paths, urls } from './config'
+import { asyncForEach } from './server/helpers'
+import './server/timestamp'
 
 
 ;(() => {
@@ -34,11 +34,7 @@ async function screenshot(urlObject, pathObject, timestamp) {
   const { url, name: urlName } = urlObject
   const { path, name: pathName } = pathObject
   const pageUrl = `${url}/${path}`
-
-  // const screenshotName = `${domain.nickname}_${path.replace(/\//g, '-')}_${timeStamp}`
   const screenshotName = `${urlName}_${pathName}_${timestamp}`
-
-  // console.log('pageUrl', pageUrl)
 
   const dimensions = await nightmare.goto(pageUrl).evaluate(() => {
     const html = document.querySelector('html')
