@@ -1,7 +1,7 @@
 import Nightmare from 'nightmare'
 import { paths, urls } from './config.js'
-import { asyncForEach } from './helpers.js'
-import './timestamp.js'
+import { asyncForEach } from './server/helpers.js'
+import './server/timestamp.js'
 
 ;(async () => {
   const newDate = new Date()
