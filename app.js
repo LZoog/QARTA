@@ -1,7 +1,8 @@
+'use strict'
 
 import { paths, urls } from './config'
-import { parallelScreenshots } from './server/screenshot'
-import { screenshotDiff } from './server/screenshot-diff'
+import { takeScreenshotPair } from './server/screenshot/taker'
+import { makeScreenshotDiff } from './server/screenshot/differ'
 import './server/timestamp'
 
 ;(() => {
@@ -10,9 +11,11 @@ import './server/timestamp'
 
   for (const pathObject of paths) {
     (async () => {
-      const screenshots = await parallelScreenshots(urls, pathObject, timestamp)
+      const screenshots = await takeScreenshotPair(urls, pathObject, timestamp)
 
-      screenshotDiff(screenshots)
+      makeScreenshotDiff(screenshots)
+      // if screenshotDiffer creates an image, run through image optim
+
       console.log(screenshots)
     })()
   }

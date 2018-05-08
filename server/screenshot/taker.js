@@ -1,9 +1,11 @@
 import Nightmare from 'nightmare'
 
-export async function parallelScreenshots(urls, pathObject, timestamp) {
+export async function takeScreenshotPair(urls, pathObject, timestamp) {
   // at present, only two urls are allowed in config
-  const screenshot1 = screenshot(urls[0], pathObject, timestamp);
-  const screenshot2 = screenshot(urls[1], pathObject, timestamp);
+  const screenshot1 = screenshot(urls[0], pathObject, timestamp)
+  const screenshot2 = screenshot(urls[1], pathObject, timestamp)
+
+  // send through imageOptim
 
   return {
     screenshot1: await screenshot1,
@@ -30,8 +32,8 @@ async function screenshot(urlObject, pathObject, timestamp) {
     .viewport(dimensions.width, dimensions.height)
     .screenshot(`./screenshots/${screenshotName}.png`)
     await nightmare
-      .end(() => console.log('screenshot finished ', screenshotName))
-  } catch(error) { return error }
+      .end(() => console.log('screenshot taken: ', screenshotName))
+  } catch(error) { throw error }
 
   return screenshotName
 }
