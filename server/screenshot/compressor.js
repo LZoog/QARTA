@@ -1,10 +1,10 @@
-import imageOptim from 'imageoptim'
+import imagemin from 'imagemin'
+import optipng from 'imagemin-optipng'
 
-export default function compress(imagePath) {
+export function compress(imagePath) {
   // from documentation
-  // imageOptim.optim(['1.png', '2.png'], { reporters: ['flat', 'html'] })
-  //   .then(function (res) {
-  //       console.log(res);
-  //   })
-  //   .done();
+
+  imagemin([imagePath], 'screenshots-opt/', {use: [optipng()]}).then(() => {
+    console.log('Images optimized');
+  });
 }
