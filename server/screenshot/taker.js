@@ -1,12 +1,11 @@
 import Nightmare from 'nightmare'
 import { compress } from './compressor'
 
-export async function takeScreenshotPair(urls, pathObject, timestamp) {
+export async function takeAndCompressScreenshotPair(urls, pathObject, timestamp) {
+  // const { urls, pathObject, timestamp } = pathConfig
   // at present, only two urls are allowed in config
   const screenshot1 = takeAndCompressScreenshot(urls[0], pathObject, timestamp)
   const screenshot2 = takeAndCompressScreenshot(urls[1], pathObject, timestamp)
-
-  // send through imageOptim
 
   return {
     screenshot1: await screenshot1,
@@ -16,7 +15,8 @@ export async function takeScreenshotPair(urls, pathObject, timestamp) {
 
 async function takeAndCompressScreenshot(urlObject, pathObject, timestamp) {
   const screenshotName = await screenshot(urlObject, pathObject, timestamp)
-  await compress(screenshotName)
+  // await compress(screenshotName)
+  return compress(screenshotName)
 }
 
 async function screenshot(urlObject, pathObject, timestamp) {
@@ -34,11 +34,14 @@ async function screenshot(urlObject, pathObject, timestamp) {
         width: html.scrollWidth,
       }
     })
+    // const screenshotBuffer = await nightmare.viewport(dimensions.width, dimensions.height).screenshot()
+    //   console.log(screenshotBuffer)
     await nightmare
-    .viewport(dimensions.width, dimensions.height)
-    .screenshot(`./screenshots/${screenshotName}.png`)
+      .viewport(dimensions.width, dimensions.height)
+      .screenshot(`./screenshots/${screenshotName}.png`)
     await nightmare
       .end(() => console.log('screenshot taken: ', screenshotName))
+
   } catch(error) { throw error }
 
   return screenshotName
