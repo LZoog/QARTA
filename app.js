@@ -1,25 +1,31 @@
 'use strict'
 
 import { paths, urls } from './config'
-import { takeAndCompressScreenshotPair } from './server/screenshot/taker'
+import { takeAndCompressScreenshot } from './server/screenshot/taker'
 import { makeAndCompressScreenshotDiff } from './server/screenshot/differ'
 import './server/timestamp'
 
-// this is temporary until errors are better handled
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at:', p, 'reason:', reason);
-});
-
-;(() => {
+;(async () => {
   const newDate = new Date()
   const timestamp = newDate.timestamp(newDate)
 
-  for (const pathObject of paths) {
-    (async () => {
-      const screenshots = await takeAndCompressScreenshotPair(urls, pathObject, timestamp)
-      const screenshotDiff = await makeAndCompressScreenshotDiff(screenshots)
+  const results = await Promise.all(paths.map(pathObj => run(pathObj, timestamp).catch(e => e)))
 
-      console.log('screenshotDiff in app', screenshotDiff)
-    })()
-  }
+  results.forEach(result => {
+    console.log('result', result)
+  })
 })()
+
+async function run(pathObj, timestamp) {
+  try {
+    const [screenshot1, screenshot2] = await Promise.all([
+      takeAndCompressScreenshot(urls[0], pathObj, timestamp),
+      takeAndCompressScreenshot(urls[1], pathObj, timestamp)
+    ])
+    const screenshotDiff = await makeAndCompressScreenshotDiff(screenshot1, screenshot2)
+
+    return 'success'
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}

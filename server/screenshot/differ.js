@@ -2,26 +2,14 @@ import util from 'util'
 import BlinkDiff from 'blink-diff'
 import { compress } from './compressor'
 
-// const diff = util.promisify()
-
-export async function makeAndCompressScreenshotDiff(screenshots) {
-  const screenshotDiffName = await makeScreenshotDiff(screenshots)
-  console.log('screenshotDiffName in makeAndCompressScreenshotDiff', screenshotDiffName)
-
-  if (screenshotDiffName) return compress(screenshotDiffName)
-  return false
-}
-
-async function makeScreenshotDiff(screenshots) {
-  const { screenshot1, screenshot2 } = screenshots
-
-  console.log('in makeScreenshotDiff')
+export async function makeAndCompressScreenshotDiff(screenshot1, screenshot2) {
+  const screenshotDiffName = `DIFF-${screenshot1}-${screenshot2}`
 
   const differ = new BlinkDiff({
     imageAPath: `./screenshots/${screenshot1}.png`,
     imageBPath: `./screenshots/${screenshot2}.png`,
 
-    imageOutputPath: `./screenshots/DIFF-${screenshot1}-${screenshot2}.png`,
+    imageOutputPath: `./screenshots/${screenshotDiffName}.png`,
     // only create output when images are different
     // imageOutputLimit: BlinkDiff.RESULT_DIFFERENT,
     // thresholdType: BlinkDiff.THRESHOLD_PERCENT,
@@ -30,13 +18,12 @@ async function makeScreenshotDiff(screenshots) {
 
   // convert callback into a promise
   const runDiffer = util.promisify(differ.run)
-  console.log('before setting result')
-  const result = await runDiffer.call(differ)
-  console.log('ran through differ, result -> ', result)
 
-  // if (!result.code) {
-    console.log('returning name')
-    return `DIFF-${screenshot1}-${screenshot2}`
-  // }
-  // return false
+  try {
+    await runDiffer.call(differ)
+  } catch (error) {
+    return Promise.reject(new Error('Failed to create screenshot diff image'))
+  }
+
+  return compress(screenshotDiffName)
 }
