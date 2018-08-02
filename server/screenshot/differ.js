@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import util from 'util'
 import BlinkDiff from 'blink-diff'
