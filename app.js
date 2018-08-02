@@ -1,22 +1,31 @@
 'use strict'
 
 import { paths, urls } from './config'
-import { takeScreenshotPair } from './server/screenshot/taker'
-import { makeScreenshotDiff } from './server/screenshot/differ'
+import { takeAndCompressScreenshot } from './server/screenshot/taker'
+import { makeAndCompressScreenshotDiff } from './server/screenshot/differ'
 import './server/timestamp'
 
-;(() => {
+;(async () => {
   const newDate = new Date()
   const timestamp = newDate.timestamp(newDate)
 
-  for (const pathObject of paths) {
-    (async () => {
-      const screenshots = await takeScreenshotPair(urls, pathObject, timestamp)
+  const results = await Promise.all(paths.map(pathObj => run(pathObj, timestamp).catch(e => e)))
 
-      makeScreenshotDiff(screenshots)
-      // if screenshotDiffer creates an image, run through image optim
-
-      console.log(screenshots)
-    })()
-  }
+  results.forEach(result => {
+    console.log('result', result)
+  })
 })()
+
+async function run(pathObj, timestamp) {
+  try {
+    const [screenshot1, screenshot2] = await Promise.all([
+      takeAndCompressScreenshot(urls[0], pathObj, timestamp),
+      takeAndCompressScreenshot(urls[1], pathObj, timestamp)
+    ])
+    const screenshotDiff = await makeAndCompressScreenshotDiff(screenshot1, screenshot2)
+
+    return 'success'
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
