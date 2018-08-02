@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import { paths, urls } from './config'
 import { takeAndCompressScreenshot } from './server/screenshot/taker'

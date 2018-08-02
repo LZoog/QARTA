@@ -1,4 +1,5 @@
-import util from 'util'
+'use strict';
+
 import BlinkDiff from 'blink-diff'
 import { compress } from './compressor'
 

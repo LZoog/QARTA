@@ -2,10 +2,11 @@
   "name": "qarta",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app-complied.js",
   "scripts": {
-    "start": "babel-node ./app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "babel app.js --out-file app-compiled.js --source-maps inline",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "yarn start && electron ."
   },
   "author": "",
   "license": "ISC",

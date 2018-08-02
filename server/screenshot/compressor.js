@@ -1,3 +1,5 @@
+'use strict';
+
 import imagemin from 'imagemin'
 import optipng from 'imagemin-optipng'
 

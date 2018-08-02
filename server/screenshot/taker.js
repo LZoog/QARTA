@@ -1,3 +1,6 @@
+
+'use strict';
+
 import Nightmare from 'nightmare'
 import { compress } from './compressor'
 
