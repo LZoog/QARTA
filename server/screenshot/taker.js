@@ -2,17 +2,14 @@
 'use strict';
 
 import Nightmare from 'nightmare'
+import { compress } from './compressor'
 
-export async function takeScreenshotPair(urls, pathObject, timestamp) {
-  // at present, only two urls are allowed in config
-  const screenshot1 = screenshot(urls[0], pathObject, timestamp)
-  const screenshot2 = screenshot(urls[1], pathObject, timestamp)
-
-  // send through imageOptim
-
-  return {
-    screenshot1: await screenshot1,
-    screenshot2: await screenshot2,
+export async function takeAndCompressScreenshot(urlObject, pathObject, timestamp) {
+  try {
+    const screenshotName = await screenshot(urlObject, pathObject, timestamp)
+    return compress(screenshotName)
+  } catch (error) {
+    return Promise.reject(error)
   }
 }
 
@@ -23,20 +20,30 @@ async function screenshot(urlObject, pathObject, timestamp) {
   const pageUrl = `${url}/${path}`
   const screenshotName = `${urlName}_${pathName}_${timestamp}`
 
+  let dimensions
   try {
-    const dimensions = await nightmare.goto(pageUrl).evaluate(() => {
+    dimensions = await nightmare.goto(pageUrl).evaluate(() => {
       const html = document.querySelector('html')
       return {
         height: html.scrollHeight + 100,
         width: html.scrollWidth,
       }
     })
+  } catch (error) {
+    return Promise.reject(new Error(`Failed to navigate to the given URL. Please ensure this URL is correct and that you have access in a browser: \n${pageUrl} `))
+  }
+
+  try {
+    const { width, height } = dimensions
+
     await nightmare
-    .viewport(dimensions.width, dimensions.height)
-    .screenshot(`./screenshots/${screenshotName}.png`)
+      .viewport(width, height)
+      .screenshot(`./screenshots/${screenshotName}.png`)
     await nightmare
       .end(() => console.log('screenshot taken: ', screenshotName))
-  } catch(error) { throw error }
+  } catch(error) {
+    return Promise.reject(new Error(`Failed to take screenshot of URL ${pageUrl} at width ${width} and height ${height}.`))
+  }
 
   return screenshotName
 }

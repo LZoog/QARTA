@@ -1,12 +1,15 @@
 'use strict';
 
-import imageOptim from 'imageoptim'
+import imagemin from 'imagemin'
+import optipng from 'imagemin-optipng'
 
-export default function compress(imagePath) {
-  // from documentation
-  // imageOptim.optim(['1.png', '2.png'], { reporters: ['flat', 'html'] })
-  //   .then(function (res) {
-  //       console.log(res);
-  //   })
-  //   .done();
+export async function compress(screenshotName) {
+
+  try {
+    await imagemin([`./screenshots/${screenshotName}.png`], `screenshots-opt`, {use: [optipng()]})
+  } catch (error) {
+    return Promise.reject(new Error(`Could not compress the following file: ./screenshots/${screenshotName}.png`))
+  }
+
+  return screenshotName
 }

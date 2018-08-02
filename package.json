@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "blink-diff": "^1.0.13",
-    "imageoptim": "^0.5.0",
+    "imagemin": "^5.3.1",
+    "imagemin-optipng": "^5.2.1",
     "nightmare": "^3.0.1"
   },
   "devDependencies": {
