@@ -1,3 +1,5 @@
+'use strict';
+
 import BlinkDiff from 'blink-diff'
 
 export function makeScreenshotDiff(screenshots) {

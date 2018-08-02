@@ -1,3 +1,5 @@
+'use strict';
+
 import imageOptim from 'imageoptim'
 
 export default function compress(imagePath) {

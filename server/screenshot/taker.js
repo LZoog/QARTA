@@ -1,3 +1,6 @@
+
+'use strict';
+
 import Nightmare from 'nightmare'
 
 export async function takeScreenshotPair(urls, pathObject, timestamp) {

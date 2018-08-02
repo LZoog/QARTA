@@ -1,3 +1,5 @@
+'use strict';
+
 import { paths, urls } from './config'
 import { takeScreenshotPair } from './server/screenshot/taker'
 import { makeScreenshotDiff } from './server/screenshot/differ'
@@ -17,4 +19,4 @@ import './server/timestamp';
       console.log(screenshots)
     })()
   }
-})();
+})()
