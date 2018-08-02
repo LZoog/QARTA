@@ -2,11 +2,16 @@
   "name": "qarta",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LZoog/QARTA.git"
+  },
   "main": "app-complied.js",
   "scripts": {
-    "start": "babel app.js --out-file app-compiled.js --source-maps inline",
+    "start": "babel-node ./app.js",
+    "start-compiled": "babel ./app.js --out-file app-compiled.js --source-maps inline",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "electron": "yarn start && electron ."
+    "electron": "npm start-compiled && electron ."
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +23,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^5.2.0"
   }
 }
