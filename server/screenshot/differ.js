@@ -2,14 +2,21 @@
 
 import util from 'util'
 import BlinkDiff from 'blink-diff'
-import { compress } from './compressor'
+// import { compress } from './compressor'
 
-export async function makeAndCompressScreenshotDiff(screenshot1, screenshot2) {
-  const screenshotDiffName = `DIFF-${screenshot1}-${screenshot2}`
+/**
+ * Represents a book.
+ * @param {array} screenshotPairNames -
+ * @param {string} author - The author of the book.
+ */
+export async function makeDiff(screenshotPairNames) {
+  console.log('screenshotPairNames', screenshotPairNames)
+  const [ screenshotName1, screenshotName2 ] = screenshotPairNames
+  const screenshotDiffName = `DIFF-${screenshotName1}-${screenshotName2}`
 
   const differ = new BlinkDiff({
-    imageAPath: `./screenshots/${screenshot1}.png`,
-    imageBPath: `./screenshots/${screenshot2}.png`,
+    imageAPath: `./screenshots/${screenshotName1}.png`,
+    imageBPath: `./screenshots/${screenshotName2}.png`,
 
     imageOutputPath: `./screenshots/${screenshotDiffName}.png`,
     // only create output when images are different
@@ -22,10 +29,9 @@ export async function makeAndCompressScreenshotDiff(screenshot1, screenshot2) {
   const runDiffer = util.promisify(differ.run)
 
   try {
-    await runDiffer.call(differ)
+    return runDiffer.call(differ)
   } catch (error) {
     return Promise.reject(new Error('Failed to create screenshot diff image'))
   }
 
-  return compress(screenshotDiffName)
 }

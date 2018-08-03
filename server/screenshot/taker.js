@@ -1,19 +1,17 @@
-
 'use strict'
 
 import Nightmare from 'nightmare'
-import { compress } from './compressor'
+// import { compress } from './compressor'
 
-export async function takeAndCompressScreenshot(urlObject, pathObject, timestamp) {
-  try {
-    const screenshotName = await screenshot(urlObject, pathObject, timestamp)
-    return compress(screenshotName)
-  } catch (error) {
-    return Promise.reject(error)
-  }
-}
+// export async function takeAndCompressScreenshot(urlObject, pathObject, timestamp) {
+//   try {
+//     return screenshot(urlObject, pathObject, timestamp)
+//   } catch (error) {
+//     return Promise.reject(error)
+//   }
+// }
 
-async function screenshot(urlObject, pathObject, timestamp) {
+export async function takeScreenshot(urlObject, pathObject, timestamp) {
   const nightmare = Nightmare()
   const { url, name: urlName } = urlObject
   const { path, name: pathName } = pathObject
@@ -33,17 +31,14 @@ async function screenshot(urlObject, pathObject, timestamp) {
     return Promise.reject(new Error(`Failed to navigate to the given URL. Please ensure this URL is correct and that you have access in a browser: \n${pageUrl} `))
   }
 
+  const { width, height } = dimensions
   try {
-    const { width, height } = dimensions
-
     await nightmare
       .viewport(width, height)
       .screenshot(`./screenshots/${screenshotName}.png`)
-    await nightmare
-      .end(() => console.log('screenshot taken: ', screenshotName))
+    await nightmare.end(() => screenshotName)
+
   } catch(error) {
     return Promise.reject(new Error(`Failed to take screenshot of URL ${pageUrl} at width ${width} and height ${height}.`))
   }
-
-  return screenshotName
 }
