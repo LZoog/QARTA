@@ -1,17 +1,14 @@
 'use strict'
 
 import Nightmare from 'nightmare'
-// import { compress } from './compressor'
 
-// export async function takeAndCompressScreenshot(urlObject, pathObject, timestamp) {
-//   try {
-//     return screenshot(urlObject, pathObject, timestamp)
-//   } catch (error) {
-//     return Promise.reject(error)
-//   }
-// }
-
-export async function takeScreenshot(urlObject, pathObject, timestamp) {
+/**
+ * Uses Nightmare to take a screenshot of a webpage, saved as a .png.
+ * @param {Object} urlObject - includes the URL and the URL name from config
+ * @param {Object} pathObject - includes the path and the path name from config
+ * @param {string} timestamp - from initial run
+ */
+export default async function takeScreenshot(urlObject, pathObject, timestamp) {
   const nightmare = Nightmare()
   const { url, name: urlName } = urlObject
   const { path, name: pathName } = pathObject

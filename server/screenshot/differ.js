@@ -2,15 +2,13 @@
 
 import util from 'util'
 import BlinkDiff from 'blink-diff'
-// import { compress } from './compressor'
 
 /**
- * Represents a book.
- * @param {array} screenshotPairNames -
- * @param {string} author - The author of the book.
+ * Creates a new image showcasing any differences between two images
+ * @param {Array} screenshotPairNames - a two-length long array with both files for comparison
  */
-export async function makeDiff(screenshotPairNames) {
-  console.log('screenshotPairNames', screenshotPairNames)
+export default async function makeDiff(screenshotPairNames) {
+  // console.log('screenshotPairNames', screenshotPairNames)
   const [ screenshotName1, screenshotName2 ] = screenshotPairNames
   const screenshotDiffName = `DIFF-${screenshotName1}-${screenshotName2}`
 
@@ -31,7 +29,7 @@ export async function makeDiff(screenshotPairNames) {
   try {
     return runDiffer.call(differ)
   } catch (error) {
-    return Promise.reject(new Error('Failed to create screenshot diff image'))
+    return Promise.reject(new Error('Failed to create screenshot diff image.'))
   }
 
 }
