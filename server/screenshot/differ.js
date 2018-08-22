@@ -8,7 +8,6 @@ import BlinkDiff from 'blink-diff'
  * @param {Array} screenshotPairNames - a two-length long array with both files for comparison
  */
 export default async function makeDiff(screenshotPairNames) {
-  // console.log('screenshotPairNames', screenshotPairNames)
   const [ screenshotName1, screenshotName2 ] = screenshotPairNames
   const screenshotDiffName = `DIFF-${screenshotName1}-${screenshotName2}`
 

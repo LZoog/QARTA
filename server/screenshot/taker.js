@@ -9,14 +9,15 @@ import Nightmare from 'nightmare'
  * @param {string} timestamp - from initial run
  */
 export default async function takeScreenshot(urlObject, pathObject, timestamp) {
-  const nightmare = Nightmare()
-  const { url, name: urlName } = urlObject
-  const { path, name: pathName } = pathObject
-  const pageUrl = `${url}/${path}`
-  const screenshotName = `${urlName}_${pathName}_${timestamp}`
+  let nightmare, pageUrl, screenshotName, dimensions
 
-  let dimensions
   try {
+    nightmare = Nightmare()
+    const { url, name: urlName } = urlObject
+    const { path, name: pathName } = pathObject
+    pageUrl = `${url}/${path}`
+    screenshotName = `${urlName}_${pathName}_${timestamp}`
+
     dimensions = await nightmare.goto(pageUrl).evaluate(() => {
       const html = document.querySelector('html')
       return {
@@ -25,7 +26,7 @@ export default async function takeScreenshot(urlObject, pathObject, timestamp) {
       }
     })
   } catch (error) {
-    return Promise.reject(new Error(`Failed to navigate to the given URL. Please ensure this URL is correct and that you have access in a browser: \n${pageUrl} `))
+    return Promise.reject(new Error(`Failed to navigate to the given URL. Please ensure this URL is correct and that you have access in a browser:\n ${pageUrl}`))
   }
 
   const { width, height } = dimensions
@@ -33,7 +34,7 @@ export default async function takeScreenshot(urlObject, pathObject, timestamp) {
     await nightmare
       .viewport(width, height)
       .screenshot(`./screenshots/${screenshotName}.png`)
-    await nightmare.end(() => screenshotName)
+    return nightmare.end(() => screenshotName)
 
   } catch(error) {
     return Promise.reject(new Error(`Failed to take screenshot of URL ${pageUrl} at width ${width} and height ${height}.`))

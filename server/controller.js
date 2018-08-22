@@ -5,11 +5,10 @@ import makeDiff from './screenshot/differ'
 import compress from './screenshot/compressor'
 
 const controls = {
-  'screenshot': async args => {
+  'screenshot': async(...args) => {
     try {
-      // console.log('args in screenshot', args)
       // convert to JPG before compression?
-      return compress(await takeScreenshot(args))
+      return takeScreenshot(...args)
     } catch (error) {
       return Promise.reject(error)
     }
@@ -17,7 +16,7 @@ const controls = {
   'differ': async screenshotPairNames => {
     try {
       // convert to JPG before compression?
-      return compress(await makeDiff(screenshotPairNames))
+      return makeDiff(screenshotPairNames)
     } catch (error) {
       return Promise.reject(error)
     }
@@ -25,15 +24,12 @@ const controls = {
 }
 
 async function imageHandler(action, ...args) {
-
-  // console.log('args', ...args)
-  for (const control in controls) {
-    // console.log('control', control)
-    if (action === control) {
-      // console.log()
-      controls[control](...args)
-      break
+  try {
+    for (const control in controls) {
+      if (action === control) return compress(await controls[control](...args))
     }
+  } catch (error) {
+    return Promise.reject(error)
   }
 }
 
