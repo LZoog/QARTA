@@ -4,8 +4,9 @@ import util from 'util'
 import BlinkDiff from 'blink-diff'
 
 /**
- * Creates a new image showcasing any differences between two images
- * @param {Array} screenshotPairNames - a two-length long array with both files for comparison
+ * Creates a new image showcasing any differences between two images.
+ * @param {Array} screenshotPairNames contains the names of two images for comparison
+ * @return {message} result of screenshot comparison
  */
 export default async function makeDiff(screenshotPairNames) {
   const [ screenshotName1, screenshotName2 ] = screenshotPairNames
@@ -26,9 +27,22 @@ export default async function makeDiff(screenshotPairNames) {
   const runDiffer = util.promisify(differ.run)
 
   try {
-    return runDiffer.call(differ)
+    const result = await runDiffer.call(differ)
+
+    // We will want to account for when an image diff is not necessary.
+
+    // const message = differ.hasPassed(result.code) ?
+    //   'Passed' : 'Failed - differences between screenshots were found.'
+
+    // if (differ.hasPassed(result.code)) {
+    //   console.log('Passed!')
+    //   return
+    // } else {
+    //   return screenshotDiffName
+    // }
+    return screenshotDiffName
   } catch (error) {
-    return Promise.reject(new Error('Failed to create screenshot diff image.'))
+    return Promise.reject(Error('Failed to run screenshot pair through the differ.'))
   }
 
 }

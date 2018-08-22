@@ -4,9 +4,10 @@ import Nightmare from 'nightmare'
 
 /**
  * Uses Nightmare to take a screenshot of a webpage, saved as a .png.
- * @param {Object} urlObject - includes the URL and the URL name from config
- * @param {Object} pathObject - includes the path and the path name from config
- * @param {string} timestamp - from initial run
+ * @param {Object} urlObject the URL object from config including the URL and URL name
+ * @param {Object} pathObject the path object from config including the path and path name
+ * @param {string} timestamp created on program start
+ * @return {string} screenshotName
  */
 export default async function takeScreenshot(urlObject, pathObject, timestamp) {
   let nightmare, pageUrl, screenshotName, dimensions

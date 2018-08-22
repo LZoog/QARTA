@@ -3,6 +3,11 @@
 import imagemin from 'imagemin'
 import optipng from 'imagemin-optipng'
 
+/**
+ * Compresses an image.
+ * @param {string} screenshotName name of image to be compressed
+ * @return {string} screenshotName name of compressed image
+ */
 export default async function compress(screenshotName) {
   try {
     await imagemin([`./screenshots/${screenshotName}.png`], 'screenshots-opt', {use: [optipng()]})
