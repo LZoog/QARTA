@@ -5,7 +5,7 @@ import BlinkDiff from 'blink-diff'
 
 /**
  * Creates a new image showcasing any differences between two images.
- * @param {Array} screenshotPairNames contains the names of two images for comparison
+ * @param {Array} screenshotBufferObjectArray array of 2 buffer objects w/ the buffer & screenshot name
  * @return {message} result of screenshot comparison
  */
 export default async function makeDiff(screenshotBufferObjectArray) {
