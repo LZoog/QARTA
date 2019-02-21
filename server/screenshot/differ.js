@@ -29,7 +29,6 @@ export default async function makeDiff(screenshotBufferObjectArray) {
     const result = await runDiffer.call(differ)
 
     // We will want to account for when an image diff is not necessary.
-
     const message = differ.hasPassed(result.code) ? 'Passed' : 'Failed - differences between screenshots were found.'
     // eslint-disable-next-line
     console.log(`${screenshotDiffName} -- ${message}`)
