@@ -5,18 +5,17 @@ import BlinkDiff from 'blink-diff'
 
 /**
  * Creates a new image showcasing any differences between two images.
- * @param {Array} screenshotPairNames contains the names of two images for comparison
+ * @param {Array} screenshotBufferObjectArray array of 2 buffer objects w/ the buffer & screenshot name
  * @return {message} result of screenshot comparison
  */
-export default async function makeDiff(screenshotPairNames) {
-  const [ screenshotName1, screenshotName2 ] = screenshotPairNames
-  const screenshotDiffName = `DIFF-${screenshotName1}-${screenshotName2}`
+export default async function makeDiff(screenshotBufferObjectArray) {
+  const [ screenshot1, screenshot2 ] = screenshotBufferObjectArray
+  const screenshotDiffName = `DIFF-${screenshot1.screenshotName}-${screenshot2.screenshotName}`
 
   const differ = new BlinkDiff({
-    imageAPath: `./screenshots/${screenshotName1}.png`,
-    imageBPath: `./screenshots/${screenshotName2}.png`,
-
-    imageOutputPath: `./screenshots/${screenshotDiffName}.png`,
+    imageA: screenshot1.buffer,
+    imageB: screenshot2.buffer,
+    imageOutputPath: `./screenshots/${screenshotDiffName}.jpg`,
     // only create output when images are different
     // imageOutputLimit: BlinkDiff.RESULT_DIFFERENT,
     // thresholdType: BlinkDiff.THRESHOLD_PERCENT,
@@ -30,10 +29,10 @@ export default async function makeDiff(screenshotPairNames) {
     const result = await runDiffer.call(differ)
 
     // We will want to account for when an image diff is not necessary.
-
-    // const message = differ.hasPassed(result.code) ?
-    //   'Passed' : 'Failed - differences between screenshots were found.'
-
+    const message = differ.hasPassed(result.code) ? 'Passed' : 'Failed - differences between screenshots were found.'
+    // eslint-disable-next-line
+    console.log(`${screenshotDiffName} -- ${message}`)
+    
     // if (differ.hasPassed(result.code)) {
     //   console.log('Passed!')
     //   return
