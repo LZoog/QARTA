@@ -1,4 +1,4 @@
 # QARTA
 Quality Assurance Regression Testing Automation
 
-*This... is... QARTA!!*
+*This... is... QARTA!*
